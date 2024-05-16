@@ -2,8 +2,9 @@ import "@/styles/globals.css";
 
 import { Inter as FontSans } from "next/font/google";
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import NavigationComponent from "@/components/navigation/navigation-component";
+import ReactQueryProvider from "@/components/providers/react-query-provider";
 
 export const metadata = {
   title: "S'NCE - Pkmn Team Builder",
@@ -31,14 +32,16 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NavigationComponent>{children}</NavigationComponent>
-        </ThemeProvider>
+        <ReactQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NavigationComponent>{children}</NavigationComponent>
+          </ThemeProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

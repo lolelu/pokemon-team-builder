@@ -10,3 +10,50 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model PokemonTeam {
+    id       String   @id @default(cuid())
+    name     String
+    //Enforce a limit of 6 pokemons per team in API
+    pokemons Pokemon[]
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+//For simplicity, we only keep track of pokemon's base form. 
+//THis table if for caching purposes, so we don't have to make a request to the pokeapi every time we need a pokemon's data if it is not older than 72 hours.
+model Pokemon {
+    id           String       @id @default(cuid())
+    pokedexId    Int         @unique
+    name         String
+    baseExperience Int
+    spriteFront  String
+    spriteBack   String
+    spriteShinyFront  String
+    spriteShinyBack   String
+    abilities    PokemonAbility[]
+    types        PokemonType[]
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+    pokemonTeam  PokemonTeam? @relation(fields: [pokemonTeamId], references: [id])
+    pokemonTeamId String?
+}
+
+model PokemonAbility {
+    id       String   @id @default(cuid())
+    name     String
+    description String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    pokemon  Pokemon  @relation(fields: [pokemonId], references: [id])
+    pokemonId String
+}
+
+model PokemonType {
+    id       String   @id @default(cuid())
+    name     String
+    hexColor String
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    pokemon  Pokemon  @relation(fields: [pokemonId], references: [id])
+    pokemonId String
+}
