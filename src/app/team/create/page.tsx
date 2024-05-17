@@ -15,21 +15,24 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CreateTeam } from "@/server/actions";
-import { error } from "console";
+
 import { GetRandomPokemon } from "@/server/getters";
 import { toast } from "sonner";
-import { Label } from "@/components/ui/label";
+
 import PokemonTypeBadge from "@/components/pokemon-type-badge";
 
 const CreatePage = () => {
+  const queryClient = useQueryClient();
   const createTeamMutation = useMutation({
     mutationFn: async (data: z.infer<typeof reducedPokemonTeamSchema>) =>
       await CreateTeam(data),
 
     onSuccess: () => {
       toast("Team created successfully");
+
+      queryClient.invalidateQueries({ queryKey: ["pokemon-teams"] });
     },
     onError: (error) => {
       console.error("Error creating team:", error);
