@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import NavigationComponent from "@/components/navigation/navigation-component";
 import ReactQueryProvider from "@/components/providers/react-query-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
   title: "S'NCE - Pkmn Team Builder",
@@ -41,6 +42,7 @@ export default function RootLayout({
           >
             <NavigationComponent>{children}</NavigationComponent>
           </ThemeProvider>
+          <Toaster />
         </ReactQueryProvider>
       </body>
     </html>

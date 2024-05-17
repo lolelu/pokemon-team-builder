@@ -1,78 +1,9 @@
 "use server";
-
 import { z } from "zod";
 import { db } from "@/server/db";
 import { pokemonTeamSchema } from "@/lib/schemas";
 import { Pokemon } from "@prisma/client";
-
-type ActionResponse = {
-  errors?: Record<string, string[]>;
-  message?: string;
-};
-
-const CreateTeam = async (
-  data: z.infer<typeof pokemonTeamSchema>,
-): Promise<ActionResponse> => {
-  //create a team with prisma, after validation with zod
-
-  const validatedFields = pokemonTeamSchema.safeParse({
-    name: data.name,
-    pokemon: data.pokemon,
-  });
-
-  if (!validatedFields.success) {
-    throw new Error("Invalid data");
-  }
-
-  const { name, pokemon } = validatedFields.data;
-
-  // Check if all pokemon IDs exist in the database
-  const existingPokemons = await db.pokemon.findMany({
-    where: {
-      id: {
-        in: pokemon,
-      },
-    },
-    select: {
-      id: true,
-    },
-  });
-
-  //Add a little delay for debug purposes
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  // Check for missing IDs
-  const existingPokemonIds = new Set(existingPokemons.map((p) => p.id));
-  const missingIds = pokemon.filter((id) => !existingPokemonIds.has(id));
-
-  if (missingIds.length > 0) {
-    // return {
-    //   errors: {
-    //     pokemon: [
-    //       `The following Pokémon IDs do not exist: ${missingIds.join(", ")}`,
-    //     ],
-    //   },
-    // };
-
-    throw new Error(
-      `The following Pokémon IDs do not exist: ${missingIds.join(", ")}`,
-    );
-  }
-
-  // Create team with prisma
-  await db.pokemonTeam.create({
-    data: {
-      name,
-      pokemons: {
-        connect: pokemon.map((id) => ({ id })),
-      },
-    },
-  });
-
-  return {
-    message: "Team created successfully",
-  };
-};
+import { PokeapiType } from "@/types/pokeapi.types";
 
 const GetPokemon = async (pokedexId: number) => {
   try {
@@ -99,11 +30,17 @@ const GetPokemon = async (pokedexId: number) => {
 
       const data = await response.json();
 
+      //Parse types
+
+      const types = data.types.map((type: PokeapiType) => type.type.name);
+
       //TODO: link types and abilities to the pokemon
       pokemon = await db.pokemon.upsert({
         where: {
           pokedexId: pokedexId,
         },
+
+        // Some fields might be null on pokeapi, so we need to check for that
         create: {
           pokedexId: data.id,
           name: data.name,
@@ -114,6 +51,7 @@ const GetPokemon = async (pokedexId: number) => {
             data.sprites.front_shiny || data.sprites.front_shiny_female,
           spriteShinyBack:
             data.sprites.back_shiny || data.sprites.back_shiny_female,
+          types: types,
         },
         update: {
           name: data.name,
@@ -138,4 +76,4 @@ const GetRandomPokemon = async () => {
   return GetPokemon(randomId);
 };
 
-export { CreateTeam, GetPokemon, GetRandomPokemon };
+export { GetPokemon, GetRandomPokemon };

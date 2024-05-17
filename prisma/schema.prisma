@@ -27,11 +27,11 @@ model Pokemon {
     name         String
     baseExperience Int
     spriteFront  String
-    spriteBack   String
-    spriteShinyFront  String
-    spriteShinyBack   String
+    spriteBack   String?
+    spriteShinyFront  String?
+    spriteShinyBack   String?
     abilities    PokemonAbility[]
-    types        PokemonType[]
+    types        String[]
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
     pokemonTeam  PokemonTeam? @relation(fields: [pokemonTeamId], references: [id])
@@ -48,12 +48,3 @@ model PokemonAbility {
     pokemonId String
 }
 
-model PokemonType {
-    id       String   @id @default(cuid())
-    name     String
-    hexColor String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    pokemon  Pokemon  @relation(fields: [pokemonId], references: [id])
-    pokemonId String
-}
