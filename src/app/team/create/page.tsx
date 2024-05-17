@@ -21,6 +21,7 @@ import { error } from "console";
 import { GetRandomPokemon } from "@/server/getters";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
+import PokemonTypeBadge from "@/components/pokemon-type-badge";
 
 const CreatePage = () => {
   const createTeamMutation = useMutation({
@@ -45,15 +46,7 @@ const CreatePage = () => {
       toast("Error getting random pokemon");
     },
     onSuccess: (data) => {
-      const pokemonData = {
-        name: data.name,
-        pokedexId: data.pokedexId,
-        spriteFront: data.spriteFront,
-        spriteBack: data.spriteBack,
-        spriteShinyFront: data.spriteShinyFront,
-        spriteShinyBack: data.spriteShinyBack,
-      };
-      append(pokemonData);
+      append(data);
 
       toast(`Added ${data.name} to your team!`);
     },
@@ -91,7 +84,7 @@ const CreatePage = () => {
 
   return (
     <>
-      <div className="mx-auto w-full max-w-5xl  px-4 py-12 md:px-6">
+      <div className="mx-auto w-full max-w-screen-2xl  px-4 py-12 md:px-6">
         <Form {...form}>
           <form
             className="space-y-8"
@@ -151,7 +144,7 @@ const CreatePage = () => {
                 </Button>
               </div>
 
-              <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+              <ul className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
                 {fields.map((pokemon) => (
                   <li
                     className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-950"
@@ -173,9 +166,13 @@ const CreatePage = () => {
                     <div className="space-y-2 p-4">
                       <h3 className="text-lg font-medium">{pokemon.name}</h3>
                       <div className="flex items-center gap-2">
-                        <span className="bg-primary-500/10 text-primary-500 rounded-md px-2 py-1 text-xs font-medium">
-                          Electric
-                        </span>
+                        {pokemon.types.map((type) => (
+                          <PokemonTypeBadge key={type} type={type} />
+                        ))}
+                        {/* if no pokemon types, show an unknown badge */}
+                        {pokemon.types.length < 1 && (
+                          <PokemonTypeBadge type="unknown" />
+                        )}
                       </div>
                     </div>
                   </li>
@@ -184,132 +181,6 @@ const CreatePage = () => {
             </div>
           </form>
         </Form>
-
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-950">
-            <div className="aspect-square">
-              <img
-                alt="Pokémon 1"
-                className="h-full w-full object-cover"
-                height={300}
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "300/300",
-                  objectFit: "cover",
-                }}
-                width={300}
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h3 className="text-lg font-medium">Pikachu</h3>
-              <div className="flex items-center gap-2">
-                <span className="bg-primary-500/10 text-primary-500 rounded-md px-2 py-1 text-xs font-medium">
-                  Electric
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-950">
-            <div className="aspect-square">
-              <img
-                alt="Placeholder"
-                className="h-full w-full object-cover"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "300/300",
-                  objectFit: "cover",
-                }}
-                width="300"
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h3 className="text-lg font-medium">Placeholder</h3>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-950">
-            <div className="aspect-square">
-              <img
-                alt="Pokémon 3"
-                className="h-full w-full object-cover"
-                height={300}
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "300/300",
-                  objectFit: "cover",
-                }}
-                width={300}
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h3 className="text-lg font-medium">Blastoise</h3>
-              <div className="flex items-center gap-2">
-                <span className="bg-primary-500/10 text-primary-500 rounded-md px-2 py-1 text-xs font-medium">
-                  Water
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-950">
-            <div className="aspect-square">
-              <img
-                alt="Placeholder"
-                className="h-full w-full object-cover"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "300/300",
-                  objectFit: "cover",
-                }}
-                width="300"
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h3 className="text-lg font-medium">Placeholder</h3>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-950">
-            <div className="aspect-square">
-              <img
-                alt="Pokémon 5"
-                className="h-full w-full object-cover"
-                height={300}
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "300/300",
-                  objectFit: "cover",
-                }}
-                width={300}
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h3 className="text-lg font-medium">Mewtwo</h3>
-              <div className="flex items-center gap-2">
-                <span className="bg-primary-500/10 text-primary-500 rounded-md px-2 py-1 text-xs font-medium">
-                  Psychic
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-lg bg-white shadow-sm dark:bg-gray-950">
-            <div className="aspect-square">
-              <img
-                alt="Placeholder"
-                className="h-full w-full object-cover"
-                height="300"
-                src="/placeholder.svg"
-                style={{
-                  aspectRatio: "300/300",
-                  objectFit: "cover",
-                }}
-                width="300"
-              />
-            </div>
-            <div className="space-y-2 p-4">
-              <h3 className="text-lg font-medium">Placeholder</h3>
-            </div>
-          </div>
-        </div>
       </div>
     </>
   );

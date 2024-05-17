@@ -60,6 +60,7 @@ const GetPokemon = async (pokedexId: number) => {
           spriteBack: data.sprites.back_default,
           spriteShinyFront: data.sprites.front_shiny,
           spriteShinyBack: data.sprites.back_shiny,
+          types: types,
         },
       });
     }
@@ -76,4 +77,21 @@ const GetRandomPokemon = async () => {
   return GetPokemon(randomId);
 };
 
-export { GetPokemon, GetRandomPokemon };
+const GetPokemonTeams = async (page: number, limit: number) => {
+  try {
+    const teams = await db.pokemonTeam.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      include: {
+        pokemons: true,
+      },
+    });
+
+    return teams;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error in teams retrieval");
+  }
+};
+
+export { GetPokemon, GetRandomPokemon, GetPokemonTeams };

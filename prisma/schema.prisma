@@ -30,21 +30,10 @@ model Pokemon {
     spriteBack   String?
     spriteShinyFront  String?
     spriteShinyBack   String?
-    abilities    PokemonAbility[]
+    abilities   String[]
     types        String[]
     createdAt    DateTime @default(now())
     updatedAt    DateTime @updatedAt
     pokemonTeam  PokemonTeam? @relation(fields: [pokemonTeamId], references: [id])
     pokemonTeamId String?
 }
-
-model PokemonAbility {
-    id       String   @id @default(cuid())
-    name     String
-    description String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    pokemon  Pokemon  @relation(fields: [pokemonId], references: [id])
-    pokemonId String
-}
-

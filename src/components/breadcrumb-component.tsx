@@ -11,6 +11,7 @@ import {
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
+import React from "react";
 
 type TBreadCrumbProps = {
   homeElement: React.ReactNode;
@@ -48,7 +49,7 @@ const BreadcrumbComponent = ({
             paths === href ? `${listClasses} ${activeClasses}` : listClasses;
 
           return (
-            <>
+            <React.Fragment key={index}>
               <BreadcrumbSeparator />
               <BreadcrumbItem key={index}>
                 <BreadcrumbLink
@@ -58,7 +59,7 @@ const BreadcrumbComponent = ({
                   <Link href={href}>{link}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
-            </>
+            </React.Fragment>
           );
         })}
       </BreadcrumbList>

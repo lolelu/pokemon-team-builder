@@ -7,6 +7,9 @@ const pokemonSchema = z.object({
   spriteBack: z.string().url().nullable(),
   spriteShinyFront: z.string().url().nullable(),
   spriteShinyBack: z.string().url().nullable(),
+  types: z.array(z.string()).max(2),
+  baseExperience: z.number(),
+  abilities: z.array(z.string()),
 });
 
 const pokemonTeamSchema = z.object({
