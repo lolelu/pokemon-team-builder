@@ -15,8 +15,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CreateTeam } from "@/server/actions";
+import {
+  useMutation,
+  UseMutationResult,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { ActionResponse, CreateTeam } from "@/server/actions";
 
 import { GetRandomPokemon } from "@/server/getters";
 import { toast } from "sonner";
@@ -25,26 +30,25 @@ import PokemonTypeBadge from "@/components/pokemon-type-badge";
 import { XIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
-const PokemonTeamForm = () => {
+const PokemonTeamForm = ({
+  mutator,
+  initialData,
+  type,
+}: {
+  mutator: () => UseMutationResult<
+    ActionResponse,
+    Error,
+    z.infer<typeof reducedPokemonTeamSchema>
+  >;
+  initialData?: z.infer<typeof pokemonTeamSchema>;
+  type?: "create" | "edit";
+}) => {
   //Used for invalidating the query cache
-  const queryClient = useQueryClient();
 
-  const {
-    mutate: server_createTeam,
-    isPending: createTeam_isPending,
-    isError: createTeam_isError,
-  } = useMutation({
-    mutationFn: CreateTeam,
-    onSuccess: () => {
-      toast("Team created successfully");
-      queryClient.invalidateQueries({ queryKey: ["pokemon-teams"] });
-    },
-    onError: (error) => {
-      console.error("Error creating team:", error);
-      toast("Error creating team");
-    },
-  });
+  const { mutate: server_mutateTeam, isPending: mutateTeam_isPending } =
+    mutator();
 
   const {
     mutate: server_addRandomPokemonToTeam,
@@ -68,21 +72,19 @@ const PokemonTeamForm = () => {
       toast("You can't have more than 6 Pokémon in your team");
       return;
     }
+    const disabledPokemon = fields.map((f) => f.pokedexId);
 
-    server_addRandomPokemonToTeam();
+    server_addRandomPokemonToTeam(disabledPokemon);
   };
 
   const form = useForm<z.infer<typeof pokemonTeamSchema>>({
     resolver: zodResolver(pokemonTeamSchema),
-    defaultValues: {
-      name: "Ash Ketchum Team",
-      pokemon: [],
-    },
+    defaultValues: initialData,
   });
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: "pokemon",
+    name: "pokemons",
     rules: {
       maxLength: 6,
     },
@@ -92,9 +94,9 @@ const PokemonTeamForm = () => {
   const onSubmit = async (data: z.infer<typeof pokemonTeamSchema>) => {
     const transformedData = {
       name: data.name,
-      pokemon: data.pokemon.map((p) => p.pokedexId),
+      pokemons: data.pokemons.map((p) => p.pokedexId),
     };
-    server_createTeam(transformedData);
+    server_mutateTeam(transformedData);
   };
 
   return (
@@ -109,7 +111,7 @@ const PokemonTeamForm = () => {
           >
             <div className="text-center">
               <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                Create Your Pokémon Team
+                {type === "edit" ? "Edit" : "Create"} Your Pokémon Team
               </h1>
               <p className="mx-auto mt-4 max-w-2xl text-gray-500 dark:text-gray-400">
                 Build your ultimate Pokémon team and get ready for the big
@@ -140,7 +142,7 @@ const PokemonTeamForm = () => {
                   onClick={handleAddPokemon}
                   disabled={
                     fields.length >= 6 ||
-                    createTeam_isPending ||
+                    mutateTeam_isPending ||
                     addRandomPokemonToTeam_isPending
                   }
                 >
@@ -149,27 +151,40 @@ const PokemonTeamForm = () => {
                 <Button
                   type="submit"
                   disabled={
-                    createTeam_isPending ||
+                    mutateTeam_isPending ||
                     fields.length < 1 ||
                     fields.length > 6 ||
                     addRandomPokemonToTeam_isPending
                   }
                 >
-                  Create Team
+                  {type === "edit" ? "Update Team" : "Create Team"}
                 </Button>
               </div>
+              <div className="grid grid-cols-1 grid-rows-1">
+                <div className="col-start-1 row-start-1 mx-auto grid w-full max-w-screen-lg  grid-cols-1 grid-rows-6 place-content-stretch  gap-8 sm:grid-cols-2 sm:grid-rows-3 lg:grid-cols-3 lg:grid-rows-2 ">
+                  {/* add 6 placeholder */}
+                  <AnimatePresence>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                      <motion.div
+                        key={index}
+                        className="h-96 w-full rounded-lg bg-white shadow-inner"
+                      />
+                    ))}
+                  </AnimatePresence>
+                </div>
 
-              <ul className="mx-auto grid w-full max-w-screen-lg grid-cols-1 place-content-stretch gap-4 sm:grid-cols-2 lg:grid-cols-3 ">
-                <AnimatePresence>
-                  {fields.map((field, index) => (
-                    <PokemonCard
-                      key={field.fieldId}
-                      pokemon={field}
-                      remove={() => remove(index)}
-                    />
-                  ))}
-                </AnimatePresence>
-              </ul>
+                <ul className="col-start-1 row-start-1 mx-auto grid w-full max-w-screen-lg grid-cols-1 grid-rows-6  place-content-stretch  gap-8 sm:grid-cols-2 sm:grid-rows-3 lg:grid-cols-3 lg:grid-rows-2 ">
+                  <AnimatePresence>
+                    {fields.map((field, index) => (
+                      <PokemonCard
+                        key={field.fieldId}
+                        pokemon={field}
+                        remove={() => remove(index)}
+                      />
+                    ))}
+                  </AnimatePresence>
+                </ul>
+              </div>
             </div>
           </form>
         </Form>
@@ -183,20 +198,33 @@ export default PokemonTeamForm;
 const PokemonCard = ({
   pokemon,
   remove,
+  className,
+  style,
 }: {
-  pokemon: z.infer<typeof pokemonTeamSchema>["pokemon"][0];
+  pokemon: z.infer<typeof pokemonTeamSchema>["pokemons"][0];
   remove: () => void;
+  className?: string;
+  style?: React.CSSProperties;
 }) => {
   return (
     <motion.li
-      className=" overflow-hidden rounded-lg bg-white shadow-lg "
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
+      className={cn(
+        "h-96 transform overflow-hidden rounded-lg bg-white drop-shadow-lg " +
+          className,
+      )}
+      style={style}
+      initial={{ opacity: 0, scale: 0.5 }}
+      animate={{
+        opacity: 1,
+        scale: 1,
+        transition: { type: "spring" },
+      }}
+      exit={{ opacity: 0, scale: 0 }}
+      transition={{ layout: { duration: 0.3, type: "spring" } }}
+      //On hover, the card will grow a little bit and rotate a little bit
+      whileHover={{ scale: 1.05, rotate: 1 }}
+      layout
       //Here to solve this issue: https://github.com/orgs/react-hook-form/discussions/11379
-
-      key={pokemon.pokedexId}
     >
       <div className="grid grid-cols-3 place-items-center bg-primary p-2 text-primary-foreground">
         <div className="flex items-center justify-self-start">

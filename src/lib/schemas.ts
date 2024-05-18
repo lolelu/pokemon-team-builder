@@ -14,12 +14,12 @@ const pokemonSchema = z.object({
 
 const pokemonTeamSchema = z.object({
   name: z.string().min(3).max(255),
-  pokemon: z.array(pokemonSchema).max(6),
+  pokemons: z.array(pokemonSchema).max(6),
 });
 
 const reducedPokemonTeamSchema = z.object({
   name: z.string().min(3).max(255),
-  pokemon: z.array(z.number()).max(6),
+  pokemons: z.array(z.number()).max(6),
 });
 
 export { pokemonTeamSchema, reducedPokemonTeamSchema, pokemonSchema };

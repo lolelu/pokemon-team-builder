@@ -70,7 +70,7 @@ export const columns: ColumnDef<PokemonTeam>[] = [
           variant={"ghost"}
           onClick={() => {
             // Navigate to the edit page
-            router.push(`/team/edit/${row.original.id}`);
+            router.push(`/team/${row.original.id}/edit`);
           }}
         >
           <Edit3 />

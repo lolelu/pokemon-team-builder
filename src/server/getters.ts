@@ -72,8 +72,13 @@ const GetPokemon = async (pokedexId: number) => {
   }
 };
 
-const GetRandomPokemon = async () => {
-  const randomId = Math.floor(Math.random() * 898) + 1;
+const GetRandomPokemon = async (disabledIds: number[] = []) => {
+  console.log("Fetching random pokemon");
+  let randomId: number;
+  do {
+    randomId = Math.floor(Math.random() * 898) + 1;
+  } while (disabledIds.includes(randomId));
+
   return GetPokemon(randomId);
 };
 
@@ -94,4 +99,23 @@ const GetPokemonTeams = async (page: number, limit: number) => {
   }
 };
 
-export { GetPokemon, GetRandomPokemon, GetPokemonTeams };
+const GetPokemonTeam = async (id: string) => {
+  console.log("Fetching team with ID: " + id);
+  try {
+    const team = await db.pokemonTeam.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        pokemons: true,
+      },
+    });
+
+    return team;
+  } catch (e) {
+    console.error(e);
+    throw new Error("Error in team retrieval");
+  }
+};
+
+export { GetPokemon, GetRandomPokemon, GetPokemonTeams, GetPokemonTeam };

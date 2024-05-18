@@ -4,7 +4,7 @@ import { columns } from "./columns";
 import { GetPokemonTeams } from "@/server/getters";
 
 const TeamListing = async () => {
-  const teams = await GetPokemonTeams(1, 10);
+  const teams = await GetPokemonTeams(1, 100);
   return <DataTable columns={columns} data={teams} />;
 };
 

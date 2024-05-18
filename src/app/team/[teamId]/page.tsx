@@ -5,7 +5,7 @@ type EditPageProps = {
   };
 };
 const TeamPage = ({ params }: EditPageProps) => {
-  return <div>Team page for team {params.teamId}</div>;
+  return <div>Future team detail page for team {params.teamId}</div>;
 };
 
 export default TeamPage;
