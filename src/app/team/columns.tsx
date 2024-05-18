@@ -1,10 +1,11 @@
 "use client";
 
+import { DataTableColumnHeader } from "@/components/column-header";
 import PokemonSpriteIcon from "@/components/pokemon-sprite-icon";
 import { Button } from "@/components/ui/button";
 import { Pokemon } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { Edit3 } from "lucide-react";
+import { ArrowUpDown, Edit3 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // This type is used to define the shape of our data.
@@ -21,11 +22,16 @@ export type PokemonTeam = {
 export const columns: ColumnDef<PokemonTeam>[] = [
   {
     accessorKey: "name",
-    header: "Name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Name" />
+    ),
   },
   {
     accessorKey: "pokemons",
-    header: "Pokémon",
+    enableSorting: false,
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Pokemon" />
+    ),
     cell: ({ row }) => {
       return (
         <>
@@ -37,8 +43,31 @@ export const columns: ColumnDef<PokemonTeam>[] = [
     },
   },
   {
+    accessorKey: "baseExpSum",
+    enableSorting: false,
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        column={column}
+        title="Base Exp. Sum
+      "
+      />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div suppressHydrationWarning>
+          {row.original.pokemons.reduce(
+            (acc, curr) => acc + curr.baseExperience,
+            0,
+          )}
+        </div>
+      );
+    },
+  },
+  {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created At" />
+    ),
     cell: ({ row }) => {
       return (
         <div suppressHydrationWarning>
@@ -49,7 +78,9 @@ export const columns: ColumnDef<PokemonTeam>[] = [
   },
   {
     accessorKey: "updatedAt",
-    header: "Updated At",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Updated At" />
+    ),
     cell: ({ row }) => {
       return (
         <div suppressHydrationWarning>

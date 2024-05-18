@@ -4,6 +4,7 @@ import { db } from "@/server/db";
 import { pokemonTeamSchema } from "@/lib/schemas";
 import { Pokemon } from "@prisma/client";
 import { PokeapiType } from "@/types/pokeapi.types";
+import { PaginationState, SortingState } from "@tanstack/react-table";
 
 const GetPokemon = async (pokedexId: number) => {
   try {
@@ -82,17 +83,45 @@ const GetRandomPokemon = async (disabledIds: number[] = []) => {
   return GetPokemon(randomId);
 };
 
-const GetPokemonTeams = async (page: number, limit: number) => {
+const GetPokemonTeams = async (
+  paginationState: PaginationState,
+  sorting: SortingState,
+) => {
   try {
+    //First, count the total number of teams
+    const totalTeams = await db.pokemonTeam.count();
+
+    //Then, fetch the teams with pagination ( if there are any  )
+
+    if (totalTeams === 0) {
+      return {
+        teams: [],
+        count: 0,
+      };
+    }
+
+    let sortQuery = {};
+    if (sorting.length > 0) {
+      sortQuery = {
+        orderBy: sorting.map((sort) => ({
+          [sort.id]: sort.desc ? "desc" : "asc",
+        })),
+      };
+    }
+
     const teams = await db.pokemonTeam.findMany({
-      take: limit,
-      skip: (page - 1) * limit,
+      take: paginationState.pageSize,
+      skip: paginationState.pageIndex * paginationState.pageSize,
+      ...sortQuery,
       include: {
         pokemons: true,
       },
     });
 
-    return teams;
+    return {
+      teams,
+      count: totalTeams,
+    };
   } catch (e) {
     console.error(e);
     throw new Error("Error in teams retrieval");
