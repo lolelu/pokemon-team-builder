@@ -6,6 +6,10 @@ This project is a Pokemon Team Builder application that allows users to create a
 
 ## Choices and decisions
 
+### Starting template
+
+I used t3 stack template as a starting point for this project. It provides a solid foundation for building full-stack applications with Next.js, Prisma, and PostgreSQL. [T3 stack](https://create.t3.gg/)
+
 ### Data fetching
 
 I'm using a combination of Next.js server actions and React Query's queries and mutations to handle data fetching and state management efficiently. This approach leverages the strengths of both technologies to ensure optimal performance and seamless user experiences.
