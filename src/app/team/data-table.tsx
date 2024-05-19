@@ -13,6 +13,12 @@ import {
 } from "@tanstack/react-table";
 
 import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import {
   Table,
   TableBody,
   TableCell,
@@ -35,6 +41,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import React from "react";
 import Link from "next/link";
+import pokemonTypes from "@/consts/ pokemon-types";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -43,6 +51,8 @@ interface DataTableProps<TData, TValue> {
   setPagination: OnChangeFn<PaginationState>;
   sorting: SortingState;
   setSorting: OnChangeFn<SortingState>;
+  typeFilter: string[];
+  setTypeFilter: React.Dispatch<React.SetStateAction<string[]>>;
   rowCount: number;
 }
 
@@ -53,6 +63,8 @@ export function DataTable<TData, TValue>({
   setPagination,
   sorting,
   setSorting,
+  typeFilter,
+  setTypeFilter,
   rowCount,
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] =
@@ -110,10 +122,44 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-        <Button variant="outline">
-          <FilterIcon className="h-4 w-4" />
-          <span>Filter</span>
-        </Button>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="outline">
+              <FilterIcon className="h-4 w-4" />
+              <span>Filter</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="grid grid-cols-2 gap-2 ">
+            {pokemonTypes.map((type) => {
+              return (
+                <div key={type.typeId} className="flex items-center gap-2">
+                  <Checkbox
+                    className="capitalize"
+                    checked={typeFilter.includes(type.type)}
+                    onCheckedChange={(value) => {
+                      if (value) {
+                        setTypeFilter([...typeFilter, type.type]);
+                      } else {
+                        setTypeFilter(
+                          typeFilter.filter((t) => t !== type.type),
+                        );
+                      }
+                    }}
+                  />
+                  <label className="capitalize">{type.type}</label>
+                </div>
+              );
+            })}
+            <Button
+              className="col-span-2"
+              onClick={() => {
+                setTypeFilter([]);
+              }}
+            >
+              Clear
+            </Button>
+          </PopoverContent>
+        </Popover>
       </div>
 
       <div className="  overflow-auto rounded-md border">
@@ -165,7 +211,7 @@ export function DataTable<TData, TValue>({
             )}
           </TableBody>
         </Table>
-        <div className="grid-cols-3 items-center gap-4 p-2 text-sm md:grid">
+        <div className="grid-cols-3 items-center gap-4 p-2 text-sm lg:grid">
           <div className=" hidden items-center justify-start gap-2 lg:flex">
             <span className="hidden md:inline">Items per page:</span>
             <label className="min-w-0">

@@ -30,9 +30,12 @@ const TeamListing = async () => {
     },
   ];
 
+  const baseTypeFilter: string[] = [];
+
   await queryClient.prefetchQuery({
-    queryKey: ["teams", basePaginationState, baseSortingState],
-    queryFn: () => GetPokemonTeams(basePaginationState, baseSortingState),
+    queryKey: ["teams", basePaginationState, baseSortingState, baseTypeFilter],
+    queryFn: () =>
+      GetPokemonTeams(basePaginationState, baseSortingState, baseTypeFilter),
   });
 
   return (
@@ -49,6 +52,7 @@ const TeamListing = async () => {
           <TeamTable
             basePaginationState={basePaginationState}
             baseSortingState={baseSortingState}
+            baseTypeFilter={baseTypeFilter}
           />
         </HydrationBoundary>
       </div>
