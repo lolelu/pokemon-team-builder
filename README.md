@@ -1,5 +1,13 @@
 # S'NCE - Pokemon Team Builder project
 
+### What's missing?
+
+- [ ] Pokemon abilities
+- [ ] Pokemon types filter
+- [ ] Pokemon types recap
+- [ ] Better pokemon card UI
+- [ ] Clean up the code inside the navigation
+
 ## Description
 
 This project is a Pokemon Team Builder application that allows users to create and manage, their Pokemon teams. It provides a user-friendly interface for adding and removing random Pokemon, as well as viewing detailed information about each Pokemon. The application leverages the Pokemon API to fetch data about Pokemon species and abilities, ensuring that users have access to up-to-date information.
