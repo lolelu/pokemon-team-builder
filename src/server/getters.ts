@@ -90,9 +90,11 @@ const GetPokemon = async (pokedexId: number) => {
 
 const GetRandomPokemon = async (disabledIds: number[] = []) => {
   console.log("Fetching random pokemon");
+
+  // Hardcode the maximum number of pokemon to 1025, because pokeapi othwerwise will also suggest alternate forms and mega evolutions
   let randomId: number;
   do {
-    randomId = Math.floor(Math.random() * 898) + 1;
+    randomId = Math.floor(Math.random() * 1025) + 1;
   } while (disabledIds.includes(randomId));
 
   return GetPokemon(randomId);

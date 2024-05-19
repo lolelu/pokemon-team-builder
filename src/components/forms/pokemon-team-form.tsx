@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { pokemonTeamSchema, reducedPokemonTeamSchema } from "@/lib/schemas";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -29,8 +29,9 @@ import { toast } from "sonner";
 import PokemonTypeBadge from "@/components/pokemon-type-badge";
 import { XIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, delay } from "framer-motion";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 const PokemonTeamForm = ({
   mutator,
@@ -61,7 +62,7 @@ const PokemonTeamForm = ({
       toast("Error getting random pokemon");
     },
     onSuccess: (data) => {
-      append(data);
+      prepend(data);
       toast(`Added ${data.name} to your team!`);
     },
   });
@@ -82,7 +83,7 @@ const PokemonTeamForm = ({
     defaultValues: initialData,
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, prepend, remove } = useFieldArray({
     control: form.control,
     name: "pokemons",
     rules: {
@@ -101,7 +102,7 @@ const PokemonTeamForm = ({
 
   return (
     <>
-      <div className="mx-auto w-full max-w-screen-2xl  px-4 py-12 md:px-6">
+      <div className="mx-auto w-full max-w-screen-lg  px-4 py-12 md:px-6">
         <Form {...form}>
           <form
             className="space-y-8"
@@ -119,7 +120,7 @@ const PokemonTeamForm = ({
               </p>
             </div>
 
-            <div className="grid gap-4">
+            <div className="grid gap-8">
               <FormField
                 control={form.control}
                 name="name"
@@ -137,7 +138,7 @@ const PokemonTeamForm = ({
                 )}
               />
               <div className="flex justify-between">
-                <Button
+                <motion.button
                   type="button"
                   onClick={handleAddPokemon}
                   disabled={
@@ -145,9 +146,37 @@ const PokemonTeamForm = ({
                     mutateTeam_isPending ||
                     addRandomPokemonToTeam_isPending
                   }
+                  className={cn(buttonVariants({}), "flex items-center gap-2")}
+                  transition={{ layout: { duration: 0.3, type: "spring" } }}
+                  layout
                 >
-                  Gotta Catch 'Em All!
-                </Button>
+                  <Image
+                    className={cn({
+                      "animate-spin": addRandomPokemonToTeam_isPending,
+                    })}
+                    src="/pokeball.png"
+                    alt="Pokeball"
+                    width={24}
+                    height={24}
+                  />
+                  <AnimatePresence>
+                    {/* When fields are 6, we hide the text with framer motion */}
+                    {fields.length < 6 && (
+                      <motion.span
+                        key="add-pokemon"
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        layout
+                        transition={{
+                          layout: { duration: 0.3, type: "spring", delay: 0.1 },
+                        }}
+                      >
+                        Gotta Catch 'Em All!
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
                 <Button
                   type="submit"
                   disabled={
@@ -161,14 +190,14 @@ const PokemonTeamForm = ({
                 </Button>
               </div>
               <div className="grid grid-cols-1 grid-rows-1">
-                <div className="col-start-1 row-start-1 mx-auto grid w-full max-w-screen-lg  grid-cols-1 grid-rows-6 place-content-stretch  gap-8 sm:grid-cols-2 sm:grid-rows-3 lg:grid-cols-3 lg:grid-rows-2 ">
+                <div className="col-start-1 row-start-1 mx-auto grid w-full   grid-cols-1 grid-rows-6 place-content-stretch  gap-8 sm:grid-cols-2 sm:grid-rows-3 lg:grid-cols-3 lg:grid-rows-2 ">
                   {/* add 6 placeholder */}
                   <AnimatePresence>
                     {Array.from({ length: 6 }).map((_, index) => (
                       <motion.div
                         key={index}
-                        className="h-96 w-full rounded-lg bg-white shadow-inner"
-                      />
+                        className="h-96 w-full rounded-lg bg-gradient-to-br from-blue-500 via-purple-200 to-gray-500  shadow-inner"
+                      ></motion.div>
                     ))}
                   </AnimatePresence>
                 </div>
@@ -209,24 +238,34 @@ const PokemonCard = ({
   return (
     <motion.li
       className={cn(
-        "h-96 transform overflow-hidden rounded-lg bg-white drop-shadow-lg " +
+        "relative flex h-96 transform flex-col justify-between overflow-hidden  rounded-lg  border-2 border-slate-400 bg-white drop-shadow-lg " +
           className,
       )}
       style={style}
-      initial={{ opacity: 0, scale: 0.5 }}
+      initial={{ opacity: 0, scale: 0.5, rotateZ: -180 }}
       animate={{
         opacity: 1,
         scale: 1,
+        rotateZ: 0,
         transition: { type: "spring" },
       }}
-      exit={{ opacity: 0, scale: 0 }}
+      exit={{ opacity: 0, scale: 0, rotateZ: 180 }}
       transition={{ layout: { duration: 0.3, type: "spring" } }}
       //On hover, the card will grow a little bit and rotate a little bit
       whileHover={{ scale: 1.05, rotate: 1 }}
       layout
       //Here to solve this issue: https://github.com/orgs/react-hook-form/discussions/11379
     >
-      <div className="grid grid-cols-3 place-items-center bg-primary p-2 text-primary-foreground">
+      <Button
+        className=" absolute right-0  top-0 flex h-8 w-8 items-center justify-center justify-self-end rounded-none rounded-bl-xl"
+        size={"icon"}
+        variant={"destructive"}
+        onClick={remove}
+        type="button"
+      >
+        <XIcon className="h-4 w-4" />
+      </Button>
+      <div className="grid grid-cols-3 place-items-center border-b-2 border-primary-foreground bg-gradient-to-r from-purple-400 via-violet-400   to-blue-500 p-2 text-primary-foreground">
         <div className="flex items-center justify-self-start">
           <span className="text-sm font-bold">#</span>
           <span className="  text-center text-sm font-bold">
@@ -236,45 +275,40 @@ const PokemonCard = ({
         <span className=" truncate text-lg font-bold capitalize">
           {pokemon.name}
         </span>
-        <Button
-          className=" flex h-6 w-6 items-center justify-center justify-self-end rounded-full"
-          size={"icon"}
-          variant={"destructive"}
-          onClick={remove}
-          type="button"
-        >
-          <XIcon className="h-4 w-4" />
-        </Button>
+        <div />
       </div>
-      <div className="flex items-center justify-center">
-        <img
-          alt={pokemon.name}
-          className="h-40 w-auto xl:h-72"
-          src={pokemon.spriteFront}
-        />
-      </div>
-      <div className="bg-secondary p-4 text-secondary-foreground">
-        <div className="flex items-center justify-between text-xs">
-          {pokemon.abilities.map((ability) => (
-            <span key={ability} className="capitalize">
-              {ability}
-            </span>
-          ))}
+      <div className="flex  h-full flex-col justify-between bg-blue-400 p-4 ">
+        <div className="flex items-center justify-center rounded-md bg-white">
+          <img
+            alt={pokemon.name}
+            className="h-40 w-auto xl:h-72"
+            src={pokemon.spriteFront}
+          />
         </div>
-        <div className="mt-2 flex ">
-          <div className="flex basis-full items-stretch justify-between">
-            <span className="text-base">BASE EXP: </span>
-            <span className="text-base font-bold">
-              {pokemon.baseExperience}
-            </span>
+        <div className="flex flex-col gap-2 rounded-md bg-secondary p-4 text-secondary-foreground">
+          <div className="flex items-center justify-between text-xs">
+            {pokemon.abilities.map((ability) => (
+              <span key={ability} className="font-bold  capitalize ">
+                {ability.replace(/-/g, " ")}
+              </span>
+            ))}
           </div>
-        </div>
-        <Separator />
-        <div className="mt-2 flex items-center gap-2">
-          {pokemon.types.map((type) => (
-            <PokemonTypeBadge key={type} type={type} />
-          ))}
-          {pokemon.types.length < 1 && <PokemonTypeBadge type="unknown" />}
+          <Separator />
+          <div className=" flex ">
+            <div className="flex basis-full items-stretch justify-between">
+              <span className="text-base">BASE EXP: </span>
+              <span className="text-base font-bold">
+                {pokemon.baseExperience}
+              </span>
+            </div>
+          </div>
+          <Separator />
+          <div className=" flex items-center gap-2">
+            {pokemon.types.map((type) => (
+              <PokemonTypeBadge key={type} type={type} />
+            ))}
+            {pokemon.types.length < 1 && <PokemonTypeBadge type="unknown" />}
+          </div>
         </div>
       </div>
     </motion.li>

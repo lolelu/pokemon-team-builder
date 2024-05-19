@@ -15,12 +15,14 @@ import {
   Package,
   Package2,
   PanelLeft,
+  PlusCircle,
   Search,
   Settings,
   ShoppingCart,
   Truck,
   Users2,
 } from "lucide-react";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 
@@ -46,7 +48,12 @@ const NavigationLinks = [
   {
     name: "Team Listing",
     Icon: <List />,
-    url: "/team/list",
+    url: "/team/",
+  },
+  {
+    name: "Create Team",
+    Icon: <PlusCircle />,
+    url: "/team/create",
   },
 ];
 
@@ -60,21 +67,18 @@ const NavigationComponent = ({ children }: { children: React.ReactNode }) => {
               href="/"
               className="group flex h-9 w-9 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:h-8 md:w-8 md:text-base"
             >
-              <Package2 className="h-4 w-4 transition-all group-hover:scale-110" />
-              <span className="sr-only">Acme Inc</span>
+              <Image
+                src="/pokeball-icon.svg"
+                alt="Home page"
+                width={32}
+                height={32}
+                className="h-6 w-6   invert filter transition-all group-hover:scale-110"
+              />
+              <span className="sr-only">Pokemon Team Builder</span>
             </Link>
             {NavigationLinks.map((link, index) => {
               return <TooltipNavigationLink key={index} link={link} />;
             })}
-          </nav>
-          <nav className="mt-auto flex flex-col items-center gap-4 px-2 sm:py-4">
-            <TooltipNavigationLink
-              link={{
-                name: "Settings",
-                Icon: <Settings />,
-                url: "/settings",
-              }}
-            />
           </nav>
         </TooltipProvider>
       </aside>
@@ -93,21 +97,19 @@ const NavigationComponent = ({ children }: { children: React.ReactNode }) => {
                   href="/"
                   className="group flex h-10 w-10 shrink-0 items-center justify-center gap-2 rounded-full bg-primary text-lg font-semibold text-primary-foreground md:text-base"
                 >
-                  <Package2 className="h-5 w-5 transition-all group-hover:scale-110" />
-                  <span className="sr-only">Acme Inc</span>
+                  <Image
+                    src="/pokeball-icon.svg"
+                    alt="Home page"
+                    width={32}
+                    height={32}
+                    className="h-6 w-6   invert filter transition-all group-hover:scale-110"
+                  />
+                  <span className="sr-only">Pokemon Team Builder</span>
                 </Link>
 
                 {NavigationLinks.map((link, index) => {
                   return <SimpleNavigationLink key={index} link={link} />;
                 })}
-
-                <SimpleNavigationLink
-                  link={{
-                    name: "Settings",
-                    Icon: <Settings />,
-                    url: "/settings",
-                  }}
-                />
               </nav>
             </SheetContent>
           </Sheet>
