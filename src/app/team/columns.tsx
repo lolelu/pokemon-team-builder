@@ -10,6 +10,7 @@ import { ArrowUpDown, Edit3 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -132,17 +133,11 @@ export const columns: ColumnDef<PokemonTeam>[] = [
     accessorKey: "edit",
     header: "Edit",
     cell: ({ row }) => {
-      const router = useRouter();
       return (
-        <Button
-          size="icon"
-          variant={"ghost"}
-          onClick={() => {
-            // Navigate to the edit page
-            router.push(`/team/${row.original.id}/edit`);
-          }}
-        >
-          <Edit3 />
+        <Button size="icon" variant={"ghost"} asChild>
+          <Link href={`/team/${row.original.id}/edit`}>
+            <Edit3 />
+          </Link>
         </Button>
       );
     },

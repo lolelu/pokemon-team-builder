@@ -17,7 +17,7 @@ const EditPokemonForm = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const mutator = () =>
+  const useMutator = () =>
     useMutation({
       mutationFn: (data: z.infer<typeof reducedPokemonTeamSchema>) =>
         UpdateTeam(id, data),
@@ -34,7 +34,7 @@ const EditPokemonForm = ({
   return (
     <>
       <PokemonTeamForm
-        mutator={mutator}
+        mutator={useMutator}
         initialData={pokemonTeam}
         type="edit"
       />

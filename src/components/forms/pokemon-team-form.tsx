@@ -172,7 +172,7 @@ const PokemonTeamForm = ({
                           layout: { duration: 0.3, type: "spring", delay: 0.1 },
                         }}
                       >
-                        Gotta Catch 'Em All!
+                        Gotta Catch &apos;Em All!
                       </motion.span>
                     )}
                   </AnimatePresence>

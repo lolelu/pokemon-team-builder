@@ -8,7 +8,7 @@ import { CreateTeam } from "@/server/actions";
 const CreatePokemonForm = () => {
   const queryClient = useQueryClient();
 
-  const mutator = () =>
+  const useMutator = () =>
     useMutation({
       mutationFn: CreateTeam,
       onSuccess: () => {
@@ -22,7 +22,7 @@ const CreatePokemonForm = () => {
     });
   return (
     <>
-      <PokemonTeamForm mutator={mutator} type="create" />
+      <PokemonTeamForm mutator={useMutator} type="create" />
     </>
   );
 };
