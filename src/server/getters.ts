@@ -6,6 +6,15 @@ import { Pokemon } from "@prisma/client";
 import { PokeapiType } from "@/types/pokeapi.types";
 import { PaginationState, SortingState } from "@tanstack/react-table";
 
+type PokemonAbility = {
+  isHidden: boolean;
+  slot: number;
+  ability: {
+    name: string;
+    url: string;
+  };
+};
+
 const GetPokemon = async (pokedexId: number) => {
   try {
     console.log("Fetching pokemon with ID: " + pokedexId);
@@ -35,6 +44,10 @@ const GetPokemon = async (pokedexId: number) => {
 
       const types = data.types.map((type: PokeapiType) => type.type.name);
 
+      const abilities = data.abilities.map(
+        (ability: PokemonAbility) => ability.ability.name,
+      );
+
       //TODO: link types and abilities to the pokemon
       pokemon = await db.pokemon.upsert({
         where: {
@@ -44,7 +57,7 @@ const GetPokemon = async (pokedexId: number) => {
         // Some fields might be null on pokeapi, so we need to check for that
         create: {
           pokedexId: data.id,
-          name: data.name,
+          name: data.species.name,
           baseExperience: data.base_experience,
           spriteFront: data.sprites.front_default || data.sprites.front_female,
           spriteBack: data.sprites.back_default || data.sprites.back_female,
@@ -53,6 +66,7 @@ const GetPokemon = async (pokedexId: number) => {
           spriteShinyBack:
             data.sprites.back_shiny || data.sprites.back_shiny_female,
           types: types,
+          abilities: abilities,
         },
         update: {
           name: data.name,
@@ -62,6 +76,7 @@ const GetPokemon = async (pokedexId: number) => {
           spriteShinyFront: data.sprites.front_shiny,
           spriteShinyBack: data.sprites.back_shiny,
           types: types,
+          abilities: abilities,
         },
       });
     }
@@ -86,6 +101,7 @@ const GetRandomPokemon = async (disabledIds: number[] = []) => {
 const GetPokemonTeams = async (
   paginationState: PaginationState,
   sorting: SortingState,
+  baseTypeFilter: string[],
 ) => {
   try {
     //First, count the total number of teams
@@ -109,10 +125,26 @@ const GetPokemonTeams = async (
       };
     }
 
+    let typeFilter = {};
+    if (baseTypeFilter.length > 0) {
+      typeFilter = {
+        where: {
+          pokemons: {
+            some: {
+              types: {
+                hasSome: baseTypeFilter,
+              },
+            },
+          },
+        },
+      };
+    }
+
     const teams = await db.pokemonTeam.findMany({
       take: paginationState.pageSize,
       skip: paginationState.pageIndex * paginationState.pageSize,
       ...sortQuery,
+      ...typeFilter,
       include: {
         pokemons: true,
       },
