@@ -18,7 +18,7 @@ const NavigationLinks = [
   {
     name: "Team Listing",
     Icon: <List />,
-    url: "/team/",
+    url: "/team",
   },
   {
     name: "Create Team",

@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:20-alpine AS deps
+FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat openssl
 WORKDIR /app
 
@@ -8,7 +8,7 @@ COPY package.json pnpm-lock.yaml* ./
 
 RUN yarn global add pnpm && pnpm i
 
-FROM --platform=linux/amd64 node:20-alpine AS builder
+FROM node:20-alpine AS builder
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 WORKDIR /app
@@ -24,7 +24,7 @@ RUN SKIP_ENV_VALIDATION=1 pnpm run build
 # Run prisma commands
 
 
-FROM --platform=linux/amd64 node:20-alpine  AS runner
+FROM node:20-alpine  AS runner
 WORKDIR /app
 
 ENV NODE_ENV production

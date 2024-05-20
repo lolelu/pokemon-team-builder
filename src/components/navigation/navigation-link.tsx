@@ -19,7 +19,7 @@ const TooltipNavigationLink = ({ link }: { link: NavigationLinkProps }) => {
   const pathname = usePathname();
   //a link is active if the pathname starts with the link name
   //TODO: Last fix
-  const isActive = (link: string) => pathname.startsWith(link);
+  const isActive = (link: string) => pathname === link;
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -43,7 +43,7 @@ const TooltipNavigationLink = ({ link }: { link: NavigationLinkProps }) => {
 const SimpleNavigationLink = ({ link }: { link: NavigationLinkProps }) => {
   const pathname = usePathname();
   //a link is active if the pathname starts with the link name
-  const isActive = (link: string) => pathname.startsWith(link);
+  const isActive = (link: string) => pathname === link;
   return (
     <Link
       href={link.url}

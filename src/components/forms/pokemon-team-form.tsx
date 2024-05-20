@@ -276,7 +276,7 @@ const PokemonCard = ({
         <div className="flex items-center justify-center rounded-md bg-white">
           <img
             alt={pokemon.name}
-            className="h-40 w-auto xl:h-72"
+            className="h-40 w-auto"
             src={pokemon.spriteFront}
           />
         </div>
