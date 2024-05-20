@@ -10,6 +10,11 @@
 
 - No missing features, all the requirements are implemented.
 
+### Knows bugs and issues
+
+- No known bugs or issues in the application itself.
+- In docker, occasionally, during docker build, an error is thrown where some checksums don't match. This is a known issue with latest docker versions, and it's not related to the application itself. Just prune the builder cache and rebuild the application with --no-cache flag.
+
 ## How to run the application
 
 Note: I usually use pnpm as a package manager, but you can use npm or yarn if you prefer.
@@ -52,10 +57,15 @@ I'm using a combination of Next.js server actions and React Query's queries and 
 ### Database choice
 
 I chose to use a PostgreSQL database for this project because it is a robust and reliable relational database that offers excellent performance and scalability. Also, it's fully compatible with Prisma, which simplifies database interactions and ensures data integrity.
+I also decided to save the data coming from the Pokemon API to the database, to avoid unnecessary requests to the API. Once some time has passed, Data will be automatically updated on first request.
 
 ### Type filtering
 
 I choosed to use an "OR" filter for the types, so the user can filter pokemon team by one or more types. It's easily switchable to an "AND" filter, but I think it's more user-friendly to have the "OR" filter.
+
+### Why there's no team/list route?
+
+I decided, for navigation simplicity, to move the "list" visualization to them "team" route. It feels better to have the pages in the hyerarchy of the routes, and it's easier to navigate between them. (Using breadcrumbs, for example)
 
 ### Main Packages Used
 
@@ -76,7 +86,3 @@ I choosed to use an "OR" filter for the types, so the user can filter pokemon te
 - **React Hook Form**: React Hook Form is a lightweight library for managing form state in React applications. It simplifies form validation and submission, making it easy to create dynamic and interactive forms.
 
 - **Prisma**: Prisma is an ORM that simplifies database interactions in Node.js applications. It provides a type-safe API for querying databases, which enhances developer productivity and ensures data integrity.
-
-### Why there's no team/list route?
-
-I decided, for navigation simplicity, to move the "list" visualization to them "team" route. It feels better to have the pages in the hyerarchy of the routes, and it's easier to navigate between them.
