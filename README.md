@@ -1,12 +1,14 @@
 # S'NCE - Pokemon Team Builder project
 
+### How to build and run the project
+
+- CD into the project folder `cd pokemon-team-builder`
+- Run docker-compose `docker-compose build --no-cache && docker-compose up`
+- Open the browser and go to `http://localhost:3000`
+
 ### What's missing?
 
-- [ ] Pokemon abilities
-- [ ] Pokemon types filter
-- [ ] Pokemon types recap
-- [ ] Better pokemon card UI
-- [ ] Clean up the code inside the navigation
+- No missing features, all the requirements are implemented.
 
 ## Description
 
@@ -25,6 +27,10 @@ I'm using a combination of Next.js server actions and React Query's queries and 
 ### Database choice
 
 I chose to use a PostgreSQL database for this project because it is a robust and reliable relational database that offers excellent performance and scalability. Also, it's fully compatible with Prisma, which simplifies database interactions and ensures data integrity.
+
+### Type filtering
+
+I choosed to use an "OR" filter for the types, so the user can filter pokemon team by one or more types. It's easily switchable to an "AND" filter, but I think it's more user-friendly to have the "OR" filter.
 
 ### Main Packages Used
 
