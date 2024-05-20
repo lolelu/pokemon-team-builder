@@ -33,7 +33,12 @@ const TeamListing = async () => {
   const baseTypeFilter: string[] = [];
 
   await queryClient.prefetchQuery({
-    queryKey: ["teams", basePaginationState, baseSortingState, baseTypeFilter],
+    queryKey: [
+      "pokemon-teams",
+      basePaginationState,
+      baseSortingState,
+      baseTypeFilter,
+    ],
     queryFn: () =>
       GetPokemonTeams(basePaginationState, baseSortingState, baseTypeFilter),
   });

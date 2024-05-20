@@ -4,6 +4,7 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import { reducedPokemonTeamSchema } from "@/lib/schemas";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 export type ActionResponse = {
   errors?: Record<string, string[]>;
@@ -39,6 +40,8 @@ const CreateTeam = async (
       },
     },
   });
+
+  revalidatePath("/team");
 
   redirect("/team");
 };
@@ -80,6 +83,8 @@ const UpdateTeam = async (
       },
     },
   });
+
+  revalidatePath("/team");
 
   redirect("/team");
 };

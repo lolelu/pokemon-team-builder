@@ -22,7 +22,7 @@ const TeamTable = ({
   const [typeFilter, setTypeFilter] = React.useState<string[]>(baseTypeFilter);
 
   const { data } = useQuery({
-    queryKey: ["teams", pagination, sorting, typeFilter],
+    queryKey: ["pokemon-teams", pagination, sorting, typeFilter],
     queryFn: () => GetPokemonTeams(pagination, sorting, typeFilter),
     placeholderData: keepPreviousData,
   });
