@@ -10,6 +10,29 @@
 
 - No missing features, all the requirements are implemented.
 
+## How to run the application
+
+Note: I usually use pnpm as a package manager, but you can use npm or yarn if you prefer.
+
+### Development
+
+1. Clone the repository
+2. Install dependencies: `pnpm install`
+3. Run the db. You can choose between using start-database.sh, which will start a docker container with the database, and also set the .env file with the correct database URL, or you can run the database locally (or in the cloud) and set the .env file manually.
+4. Run `pnpm dp:push` to apply the database schema
+5. Run the application: `pnpm dev`
+6. Open the browser and go to `http://localhost:3000`
+
+Note: The application use docker, to set up both the database and the application.
+
+### Production
+
+1. Clone the repository
+2. Prune eventual conflicting dependencies: `docker builder prune` (if needed)
+3. Build the application: `docker-compose build` (If needed, you can use the `--no-cache` flag)
+4. Run the application: `docker-compose up`
+5. Open the browser and go to `http://localhost:3000`
+
 ## Description
 
 This project is a Pokemon Team Builder application that allows users to create and manage, their Pokemon teams. It provides a user-friendly interface for adding and removing random Pokemon, as well as viewing detailed information about each Pokemon. The application leverages the Pokemon API to fetch data about Pokemon species and abilities, ensuring that users have access to up-to-date information.
