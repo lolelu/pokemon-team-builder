@@ -8,7 +8,7 @@ type EditPageProps = {
   };
 };
 const EditPage = async ({ params }: EditPageProps) => {
-  //Get from getters data about the team
+ 
   const pokemonTeam = await GetPokemonTeam(params.teamId);
 
   if (!pokemonTeam) {
