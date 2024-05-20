@@ -9,7 +9,7 @@ export default function Page() {
             Welcome to Pokemon Team Builder
           </h1>
           <p className="text-lg text-gray-500 dark:text-gray-400 md:text-xl">
-            For S&apos;NCE, by Lorenzo Cherubin
+            By Lorenzo Cherubin
           </p>
           <div className="flex justify-center gap-4">
             <Link

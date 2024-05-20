@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 
 export const metadata = {
-  title: "S'NCE - Pkmn Team Builder",
+  title: "Pkmn Team Builder",
   description: "A Pokémon team builder",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };

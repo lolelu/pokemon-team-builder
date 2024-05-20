@@ -1,4 +1,4 @@
-# S'NCE - Pokemon Team Builder project
+# Pokemon Team Builder project
 
 ### How to build and run the project
 
@@ -86,3 +86,9 @@ I decided, for navigation simplicity, to move the "list" visualization to them "
 - **React Hook Form**: React Hook Form is a lightweight library for managing form state in React applications. It simplifies form validation and submission, making it easy to create dynamic and interactive forms.
 
 - **Prisma**: Prisma is an ORM that simplifies database interactions in Node.js applications. It provides a type-safe API for querying databases, which enhances developer productivity and ensures data integrity.
+
+<!-- author -->
+
+## Author
+
+Lorenzo 'Lolelu' Cherubin
