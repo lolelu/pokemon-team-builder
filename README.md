@@ -13,12 +13,14 @@
 ## How to run the application
 
 Note: I usually use pnpm as a package manager, but you can use npm or yarn if you prefer.
+Note: Developed using node v20.13.1, tested up to node 22
+To set the right node version, just use `nvm use` or (`nvm install` and then `nvm use`) in the root folder.
 
 ### Development
 
 1. Clone the repository
 2. Install dependencies: `pnpm install`
-3. Run the db. You can choose between using start-database.sh, which will start a docker container with the database, and also set the .env file with the correct database URL, or you can run the database locally (or in the cloud) and set the .env file manually.
+3. Run the db. You can choose between using start-database.sh, which will start a docker container with the database, and also set the .env file with the correct database URL, or you can run the database locally (or in the cloud) and set the .env file manually. (env.example is provided)
 4. Run `pnpm dp:push` to apply the database schema
 5. Run the application: `pnpm dev`
 6. Open the browser and go to `http://localhost:3000`
