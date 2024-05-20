@@ -1,11 +1,5 @@
 # Pokemon Team Builder project
 
-### How to build and run the project
-
-- CD into the project folder `cd pokemon-team-builder`
-- Run docker-compose `docker-compose build --no-cache && docker-compose up`
-- Open the browser and go to `http://localhost:3000`
-
 ### What's missing?
 
 - No missing features, all the requirements are implemented.
