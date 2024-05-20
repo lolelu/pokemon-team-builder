@@ -1,7 +1,6 @@
 import EditPokemonForm from "@/components/forms/edit-form";
 import { GetPokemonTeam } from "@/server/getters";
 import { notFound } from "next/navigation";
-import React from "react";
 
 type EditPageProps = {
   params: {

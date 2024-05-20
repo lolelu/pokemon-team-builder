@@ -1,9 +1,7 @@
 "use server";
-import { z } from "zod";
 import { db } from "@/server/db";
-import { pokemonTeamSchema } from "@/lib/schemas";
-import { Pokemon } from "@prisma/client";
 import { PokeapiType } from "@/types/pokeapi.types";
+import { Pokemon } from "@prisma/client";
 import { PaginationState, SortingState } from "@tanstack/react-table";
 
 type PokemonAbility = {
@@ -17,7 +15,6 @@ type PokemonAbility = {
 
 const GetPokemon = async (pokedexId: number) => {
   try {
-    console.log("Fetching pokemon with ID: " + pokedexId);
     //1. Check if the pokemon exists in the database and it has not been updated in the last week
     let pokemon: Pokemon | null = await db.pokemon.findFirst({
       where: {
@@ -89,8 +86,6 @@ const GetPokemon = async (pokedexId: number) => {
 };
 
 const GetRandomPokemon = async (disabledIds: number[] = []) => {
-  console.log("Fetching random pokemon");
-
   // Hardcode the maximum number of pokemon to 1025, because pokeapi othwerwise will also suggest alternate forms and mega evolutions
   let randomId: number;
   do {
@@ -163,7 +158,6 @@ const GetPokemonTeams = async (
 };
 
 const GetPokemonTeam = async (id: string) => {
-  console.log("Fetching team with ID: " + id);
   try {
     const team = await db.pokemonTeam.findUnique({
       where: {
@@ -181,4 +175,4 @@ const GetPokemonTeam = async (id: string) => {
   }
 };
 
-export { GetPokemon, GetRandomPokemon, GetPokemonTeams, GetPokemonTeam };
+export { GetPokemon, GetPokemonTeam, GetPokemonTeams, GetRandomPokemon };

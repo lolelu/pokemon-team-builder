@@ -1,48 +1,18 @@
 import * as React from "react";
 
-import Link from "next/link";
-import {
-  ChevronLeft,
-  ChevronRight,
-  Copy,
-  CreditCard,
-  File,
-  Home,
-  LineChart,
-  List,
-  ListFilter,
-  MoreVertical,
-  Package,
-  Package2,
-  PanelLeft,
-  PlusCircle,
-  Search,
-  Settings,
-  ShoppingCart,
-  Truck,
-  Users2,
-} from "lucide-react";
+import { List, PanelLeft, PlusCircle } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
-import { Input } from "@/components/ui/input";
-
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
-import { usePathname } from "next/navigation";
 import BreadcrumbComponent from "../breadcrumb-component";
-import { cn } from "@/lib/utils";
-import { SimpleNavigationLink, TooltipNavigationLink } from "./navigation-link";
 import { ModeToggle } from "../theme-toggle";
+import { SimpleNavigationLink, TooltipNavigationLink } from "./navigation-link";
 
 const NavigationLinks = [
   {

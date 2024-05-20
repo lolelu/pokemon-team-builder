@@ -1,11 +1,10 @@
-import { Pokemon } from "@prisma/client";
-import React from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Pokemon } from "@prisma/client";
 import Image from "next/image";
 
 const PokemonSpriteIcon = (pokemon: Pokemon) => {

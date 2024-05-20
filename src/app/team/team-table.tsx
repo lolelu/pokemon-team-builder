@@ -1,10 +1,10 @@
 "use client";
-import React, { useState } from "react";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
-import { PaginationState, SortingState } from "@tanstack/react-table";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { GetPokemonTeams } from "@/server/getters";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { PaginationState, SortingState } from "@tanstack/react-table";
+import React, { useState } from "react";
+import { columns } from "./columns";
+import { DataTable } from "./data-table";
 
 const TeamTable = ({
   basePaginationState,

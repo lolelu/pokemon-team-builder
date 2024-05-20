@@ -1,10 +1,10 @@
 "use server";
 
-import { z } from "zod";
-import { db } from "@/server/db";
 import { reducedPokemonTeamSchema } from "@/lib/schemas";
-import { redirect } from "next/navigation";
+import { db } from "@/server/db";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
 export type ActionResponse = {
   errors?: Record<string, string[]>;
@@ -51,9 +51,6 @@ const UpdateTeam = async (
   data: z.infer<typeof reducedPokemonTeamSchema>,
 ): Promise<ActionResponse> => {
   //update a team with prisma, after validation with zod
-
-  console.log("Updating team with ID: " + id);
-  console.log("Data: ", data);
 
   const validatedFields = reducedPokemonTeamSchema.safeParse({
     name: data.name,

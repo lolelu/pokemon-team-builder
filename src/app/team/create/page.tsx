@@ -1,5 +1,3 @@
-import React from "react";
-
 import CreatePokemonForm from "@/components/forms/create-form";
 
 const CreatePage = () => {

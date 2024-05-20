@@ -1,19 +1,13 @@
 "use client";
 import {
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
-import { LucideProps } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
-// name: "Dashboard",
-// icon: Home,
-// active: true,
-// url: "/dashboard",
 
 type NavigationLinkProps = {
   name: string;
@@ -24,6 +18,7 @@ type NavigationLinkProps = {
 const TooltipNavigationLink = ({ link }: { link: NavigationLinkProps }) => {
   const pathname = usePathname();
   //a link is active if the pathname starts with the link name
+  //TODO: Last fix
   const isActive = (link: string) => pathname.startsWith(link);
   return (
     <Tooltip>
@@ -65,4 +60,4 @@ const SimpleNavigationLink = ({ link }: { link: NavigationLinkProps }) => {
   );
 };
 
-export { TooltipNavigationLink, SimpleNavigationLink };
+export { SimpleNavigationLink, TooltipNavigationLink };

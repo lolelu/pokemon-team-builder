@@ -1,9 +1,4 @@
 "use client";
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useFieldArray } from "react-hook-form";
-import { z } from "zod";
-import { pokemonTeamSchema, reducedPokemonTeamSchema } from "@/lib/schemas";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Form,
@@ -15,22 +10,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  useMutation,
-  UseMutationResult,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { ActionResponse, CreateTeam } from "@/server/actions";
+import { pokemonTeamSchema, reducedPokemonTeamSchema } from "@/lib/schemas";
+import { ActionResponse } from "@/server/actions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation, UseMutationResult } from "@tanstack/react-query";
+import React from "react";
+import { useFieldArray, useForm } from "react-hook-form";
+import { z } from "zod";
 
 import { GetRandomPokemon } from "@/server/getters";
 import { toast } from "sonner";
 
 import PokemonTypeBadge from "@/components/pokemon-type-badge";
-import { XIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
-import { motion, AnimatePresence, delay } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { XIcon } from "lucide-react";
 import Image from "next/image";
 
 const PokemonTeamForm = ({

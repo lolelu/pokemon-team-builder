@@ -18,6 +18,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -26,23 +34,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button, buttonVariants } from "@/components/ui/button";
+import pokemonTypes from "@/consts/ pokemon-types";
 import {
   ChevronLeftIcon,
   ChevronRightIcon,
   FilterIcon,
   PlusIcon,
 } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuCheckboxItem,
-} from "@/components/ui/dropdown-menu";
-import React from "react";
 import Link from "next/link";
-import pokemonTypes from "@/consts/ pokemon-types";
-import { Checkbox } from "@/components/ui/checkbox";
+import React from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -2,20 +2,13 @@
 
 import { DataTableColumnHeader } from "@/components/column-header";
 import PokemonSpriteIcon from "@/components/pokemon-sprite-icon";
-import PokemonTypeBadge from "@/components/pokemon-type-badge";
 import { Button } from "@/components/ui/button";
 import { Pokemon } from "@prisma/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, Edit3 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Edit3 } from "lucide-react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-
-//Redefined the PokemonTeam type to include the Pokemon type (not included in Prisma generated types)
 export type PokemonTeam = {
   id: string;
   name: string;

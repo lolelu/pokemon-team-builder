@@ -1,18 +1,11 @@
-import React from "react";
-import { DataTable } from "./data-table";
-import { columns } from "./columns";
 import { GetPokemonTeams } from "@/server/getters";
-import { Button } from "@/components/ui/button";
-import { FilterIcon, PlusIcon } from "lucide-react";
-import { buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
-import TeamTable from "./team-table";
 import {
   dehydrate,
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
 import { PaginationState, SortingState } from "@tanstack/react-table";
+import TeamTable from "./team-table";
 
 const TeamListing = async () => {
   const queryClient = new QueryClient();
