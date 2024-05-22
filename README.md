@@ -3,6 +3,7 @@
 ### What's missing?
 
 - No missing features, all the requirements are implemented.
+- (22/05 Update) - Discovered a wrong link, fixed
 
 ### Knows bugs and issues
 
